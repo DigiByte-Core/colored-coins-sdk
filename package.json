@@ -24,7 +24,7 @@
   "dependencies": {
     "async": "^2.1.4",
     "blockexplorer-rpc": "^0.0.4",
-    "digiasset-transaction-builder": "^0.2.0",
+    "digiasset-transaction-builder": "^0.2.1",
     "digiassets-rpc": "^0.2.0",
     "debug": "^2.6.8",
     "digiasset-hdwallet": "^0.8.0",
