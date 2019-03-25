@@ -27,7 +27,7 @@
     "digiasset-transaction-builder": "^0.2.0",
     "digiassets-rpc": "^0.2.0",
     "debug": "^2.6.8",
-    "hdwallet": "^0.7.1",
+    "digiasset-hdwallet": "^0.8.0",
     "node-rest-client": "2.5.0",
     "node-rsa": "^0.2.24",
     "request": "^2.79.0",

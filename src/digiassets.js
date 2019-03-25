@@ -3,7 +3,7 @@ var async = require('async')
 var events = require('events')
 var request = require('request')
 var debug = require('debug')('digiassets-sdk')
-var HDWallet = require('hdwallet')
+var HDWallet = require('digiasset-hdwallet')
 var DigiAssetsRpc = require('digiassets-rpc')
 var BlockExplorerRpc = require('blockexplorer-rpc')
 var DigiAssetsBuilder = require('digiasset-transaction-builder')
@@ -14,7 +14,7 @@ var MetadataServer = require('../lib/metadata_server')
 var mainnetColoredCoinsHost = 'https://api.digiassets.net/v3'
 var testnetColoredCoinsHost = 'https://testnet.api.coloredcoins.org/v3'
 
-var mainnetBlockExplorerHost = 'https://explorer.digiassets.net'
+var mainnetBlockExplorerHost = 'https://explorerapi.digiassets.net'
 var testnetBlockExplorerHost = 'https://testnet.explorer.coloredcoins.org'
 
 var metadataServerHost = 'https://metadata.digiassets.net'
