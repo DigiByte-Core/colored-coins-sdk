@@ -1,11 +1,11 @@
 /* eslint-env mocha */
-var ColoredCoins = require('..')
+var DigiAssets = require('..')
 var assert = require('assert')
 var jf = require('jsonfile')
 var path = require('path')
 
-describe('Test ColoredCoins SDK', function () {
-  var cc
+describe('Test DigiAssets SDK', function () {
+  var da
 
   var fromAddress = 'mxNTyQ3WdFMQE7SGVpSQGXnSDevGMLq7dg'
   var toAddress = 'mgNcWJp4hPd7MN6ets2P8HcB5k99aCs8cy'
@@ -35,8 +35,8 @@ describe('Test ColoredCoins SDK', function () {
       }
     }
     // read from command line arguments
-    cc = new ColoredCoins(settings)
-    cc.init(done)
+    da = new DigiAssets(settings)
+    da.init(done)
   })
 
   it('should create an issuance transaction', function (done) {
@@ -52,10 +52,10 @@ describe('Test ColoredCoins SDK', function () {
         }
       ]
     }
-    cc._getUtxosForAddresses([args.issueAddress], function(err, utxos) {
+    da._getUtxosForAddresses([args.issueAddress], function(err, utxos) {
       assert.ifError(err)
       args.utxos = utxos
-      cc.buildTransaction('issue', args, function (err, ans) {
+      da.buildTransaction('issue', args, function (err, ans) {
         assert.ifError(err)
         assert.equal(typeof ans.txHex, 'string')
         assert(ans.txHex.length)
@@ -81,11 +81,11 @@ describe('Test ColoredCoins SDK', function () {
         }
       ]
     }
-    cc._getUtxosForAddresses(args.from, function(err, utxos) {
+    da._getUtxosForAddresses(args.from, function(err, utxos) {
       assert.ifError(err)
       delete args.from
       args.utxos = utxos
-      cc.buildTransaction('send', args, function (err, ans) {
+      da.buildTransaction('send', args, function (err, ans) {
         assert.ifError(err)
         assert.equal(typeof ans.txHex, 'string')
         assert(ans.txHex.length)
@@ -109,11 +109,11 @@ describe('Test ColoredCoins SDK', function () {
         }
       ]
     }
-    cc._getUtxosForAddresses(args.from, function(err, utxos) {
+    da._getUtxosForAddresses(args.from, function(err, utxos) {
       assert.ifError(err)
       delete args.from
       args.utxos = utxos
-      cc.buildTransaction('burn', args, function (err, ans) {
+      da.buildTransaction('burn', args, function (err, ans) {
         assert.ifError(err)
         assert.equal(typeof ans.txHex, 'string')
         assert(ans.txHex.length)
@@ -126,7 +126,7 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should transmit a transaction', function (done) {
     this.timeout(15000)
-    cc.transmit(signedTxHex, function (err, ans) {
+    da.transmit(signedTxHex, function (err, ans) {
       assert(err)
       done()
     })
@@ -134,9 +134,9 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should get address info', function (done) {
     this.timeout(15000)
-    cc.getAddressInfo(cc.hdwallet.getAddress(0, 0), function (err, ans) {
+    da.getAddressInfo(da.hdwallet.getAddress(0, 0), function (err, ans) {
       assert.ifError(err)
-      assert.equal(ans.address, cc.hdwallet.getAddress(0, 0))
+      assert.equal(ans.address, da.hdwallet.getAddress(0, 0))
       assert(Array.isArray(ans.utxos))
       assert(ans.utxos.length)
       done()
@@ -145,7 +145,7 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should get stakeholders', function (done) {
     this.timeout(15000)
-    cc.getStakeHolders(assetId, function (err, ans) {
+    da.getStakeHolders(assetId, function (err, ans) {
       assert.ifError(err)
       assert.equal(ans.assetId, assetId)
       assert(Array.isArray(ans.holders))
@@ -156,7 +156,7 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should verify issuer', function (done) {
     this.timeout(15000)
-    cc.verifyIssuer(issuerAssetId, issuerJson, function (err, ans) {
+    da.verifyIssuer(issuerAssetId, issuerJson, function (err, ans) {
       assert.ifError(err)
       assert.deepEqual(ans, {
         verifications: {
@@ -170,10 +170,10 @@ describe('Test ColoredCoins SDK', function () {
   })
 
   it('should get error when issue address does not have BTC', function (done) {
-    var issueAddress = cc.hdwallet.getAddress()
-    cc._getUtxosForAddresses([issueAddress], function(err, utxos) {
+    var issueAddress = da.hdwallet.getAddress()
+    da._getUtxosForAddresses([issueAddress], function(err, utxos) {
       assert.ifError(err)
-      cc.issueAsset({ amount: 36, issueAddress: issueAddress, fee: 1000, utxos: utxos }, function (err, result) {
+      da.issueAsset({ amount: 36, issueAddress: issueAddress, fee: 1000, utxos: utxos }, function (err, result) {
         assert(err)
         assert.equal(err.name, 'NotEnoughFundsError')
         done()
@@ -184,15 +184,15 @@ describe('Test ColoredCoins SDK', function () {
   it('should create and transmit an issuance transaction', function (done) {
     this.timeout(15000)
     var args = {
-      issueAddress: cc.hdwallet.getAddress(0, 0),
+      issueAddress: da.hdwallet.getAddress(0, 0),
       amount: 36,
       fee: 1000,
       metadata: {
         assetName: expectedAssetName
       },
-      financeChangeAddress: cc.hdwallet.getAddress(0, 0)
+      financeChangeAddress: da.hdwallet.getAddress(0, 0)
     }
-    cc.issueAsset(args, function (err, result) {
+    da.issueAsset(args, function (err, result) {
       assert.ifError(err)
       assert(result.txHex)
       assert(result.txid)
@@ -206,18 +206,18 @@ describe('Test ColoredCoins SDK', function () {
   it('should create and transmit a transfer transaction', function (done) {
     this.timeout(15000)
     var args = {
-      from: [cc.hdwallet.getAddress(0, 0)],
+      from: [da.hdwallet.getAddress(0, 0)],
       to: [
         {
           assetId: assetId,
-          address: cc.hdwallet.getAddress(),
+          address: da.hdwallet.getAddress(),
           amount: 12
         }
       ],
       fee: 1000,
-      financeChangeAddress: cc.hdwallet.getAddress(0, 0)
+      financeChangeAddress: da.hdwallet.getAddress(0, 0)
     }
-    cc.sendAsset(args, function (err, result) {
+    da.sendAsset(args, function (err, result) {
       assert.ifError(err)
       assert(result.txHex)
       assert(result.txid)
@@ -228,7 +228,7 @@ describe('Test ColoredCoins SDK', function () {
   it('should create and transmit a burn transaction', function (done) {
     this.timeout(15000)
     var args = {
-      from: [cc.hdwallet.getAddress(0, 0)],
+      from: [da.hdwallet.getAddress(0, 0)],
       burn: [
         {
           assetId: assetId,
@@ -236,9 +236,9 @@ describe('Test ColoredCoins SDK', function () {
         }
       ],
       fee: 1000,
-      financeChangeAddress: cc.hdwallet.getAddress(0, 0)
+      financeChangeAddress: da.hdwallet.getAddress(0, 0)
     }
-    cc.burnAsset(args, function (err, result) {
+    da.burnAsset(args, function (err, result) {
       assert.ifError(err)
       assert(result.txHex)
       assert(result.txid)
@@ -248,7 +248,7 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should get assetmetadata', function (done) {
     this.timeout(15000)
-    cc.getAssetMetadata(assetId, issuanceUtxo, function (err, ans) {
+    da.getAssetMetadata(assetId, issuanceUtxo, function (err, ans) {
       assert.ifError(err)
       assert.equal(ans.assetId, assetId)
       assert.equal(ans.assetName, expectedAssetName)
@@ -260,7 +260,7 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should get all utxos in wallet', function (done) {
     this.timeout(15000)
-    cc.getUtxos(function (err, res) {
+    da.getUtxos(function (err, res) {
       assert.ifError(err)
       assert(Array.isArray(res) && res.length)
       res.forEach(elem => {
@@ -280,7 +280,7 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should get assets in wallet', function (done) {
     this.timeout(15000)
-    cc.getAssets(function (err, res) {
+    da.getAssets(function (err, res) {
       assert.ifError(err)
       assert(Array.isArray(res) && res.length)
       res.forEach(elem => {
@@ -299,7 +299,7 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should get issued assets', function (done) {
     this.timeout(15000)
-    cc.getIssuedAssets(function (err, res) {
+    da.getIssuedAssets(function (err, res) {
       assert.ifError(err)
       assert(Array.isArray(res))
       res.forEach(elem => {
@@ -317,7 +317,7 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should get all transactions of wallet addresses', function (done) {
     this.timeout(15000)
-    cc.getTransactions(function (err, transactions) {
+    da.getTransactions(function (err, transactions) {
       assert.ifError(err)
       assert(Array.isArray(transactions))
       transactions.forEach(transaction => {
@@ -337,23 +337,23 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should receive a \'newTransaction\' event when eventsSecure = true', function (done) {
     this.timeout(15000)
-    cc.events = true
-    cc.eventsSecure = true
+    da.events = true
+    da.eventsSecure = true
 
     var txids = []
     var txid
     var once = 0
-    cc.on('newTransaction', function (transaction) {
+    da.on('newTransaction', function (transaction) {
       txids.push(transaction.txid)
       if (txid && ~txids.indexOf(txid) && !once++) return done()
     })
     var args = {
       amount: 36,
-      issueAddress: cc.hdwallet.getAddress(0, 0),
+      issueAddress: da.hdwallet.getAddress(0, 0),
       fee: 1000,
-      financeChangeAddress: cc.hdwallet.getAddress(0, 0)
+      financeChangeAddress: da.hdwallet.getAddress(0, 0)
     }
-    cc.issueAsset(args, function (err, ans) {
+    da.issueAsset(args, function (err, ans) {
       assert.ifError(err)
       txid = ans.txid
       if (txid && ~txids.indexOf(txid) && !once++) return done()
@@ -362,70 +362,70 @@ describe('Test ColoredCoins SDK', function () {
 
   it('should receive a \'newTransaction\' event when eventsSecure = false', function (done) {
     this.timeout(15000)
-    cc.eventsSecure = false
+    da.eventsSecure = false
 
     var txids = []
     var txid
     var once = 0
-    cc.on('newTransaction', function (transaction) {
+    da.on('newTransaction', function (transaction) {
       txids.push(transaction.txid)
       if (txid && ~txids.indexOf(txid) && !once++) return done()
     })
     var args = {
       amount: 36,
-      issueAddress: cc.hdwallet.getAddress(0, 0),
+      issueAddress: da.hdwallet.getAddress(0, 0),
       fee: 1000,
-      financeChangeAddress: cc.hdwallet.getAddress(0, 0)
+      financeChangeAddress: da.hdwallet.getAddress(0, 0)
     }
-    cc.issueAsset(args, function (err, ans) {
+    da.issueAsset(args, function (err, ans) {
       assert.ifError(err)
       txid = ans.txid
       if (txid && ~txids.indexOf(txid) && !once++) return done()
     })
   })
 
-  it('should receive a \'newCCTransaction\' event when eventsSecure = true', function (done) {
+  it('should receive a \'newDATransaction\' event when eventsSecure = true', function (done) {
     this.timeout(15000)
-    cc.eventsSecure = true
+    da.eventsSecure = true
 
     var txids = []
     var txid
     var once = 0
-    cc.on('newCCTransaction', function (transaction) {
+    da.on('newDATransaction', function (transaction) {
       txids.push(transaction.txid)
       if (txid && ~txids.indexOf(txid) && !once++) return done()
     })
     var args = {
       amount: 36,
-      issueAddress: cc.hdwallet.getAddress(0, 0),
+      issueAddress: da.hdwallet.getAddress(0, 0),
       fee: 1000,
-      financeChangeAddress: cc.hdwallet.getAddress(0, 0)
+      financeChangeAddress: da.hdwallet.getAddress(0, 0)
     }
-    cc.issueAsset(args, function (err, ans) {
+    da.issueAsset(args, function (err, ans) {
       assert.ifError(err)
       txid = ans.txid
       if (txid && ~txids.indexOf(txid) && !once++) return done()
     })
   })
 
-  it('should receive a \'newCCTransaction\' event when eventsSecure = false', function (done) {
+  it('should receive a \'newDATransaction\' event when eventsSecure = false', function (done) {
     this.timeout(15000)
-    cc.eventsSecure = false
+    da.eventsSecure = false
 
     var txids = []
     var txid
     var once = 0
-    cc.on('newCCTransaction', function (transaction) {
+    da.on('newDATransaction', function (transaction) {
       txids.push(transaction.txid)
       if (txid && ~txids.indexOf(txid) && !once++) return done()
     })
     var args = {
       amount: 36,
-      issueAddress: cc.hdwallet.getAddress(0, 0),
+      issueAddress: da.hdwallet.getAddress(0, 0),
       fee: 1000,
-      financeChangeAddress: cc.hdwallet.getAddress(0, 0)
+      financeChangeAddress: da.hdwallet.getAddress(0, 0)
     }
-    cc.issueAsset(args, function (err, ans) {
+    da.issueAsset(args, function (err, ans) {
       assert.ifError(err)
       txid = ans.txid
       if (txid && ~txids.indexOf(txid) && !once++) return done()

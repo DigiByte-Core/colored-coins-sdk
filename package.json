@@ -1,21 +1,22 @@
 {
-  "name": "coloredcoins-sdk",
-  "version": "0.3.2",
-  "description": "Colored-Coins SDK for issuing and transferring digital assets using blockchain technology",
-  "main": "src/coloredcoins.js",
+  "name": "digiassets-sdk",
+  "version": "0.4.0",
+  "description": "DigiAssets SDK for issuing and transferring digital assets using blockchain technology",
+  "main": "src/digiassets.js",
   "scripts": {
     "test": "mocha",
-    "browserify": "browserify --ignore-missing -it=mkpath --standalone ColoredCoins --entry src/coloredcoins.js --outfile client/coloredcoins.client.js",
-    "babel": "babel client/coloredcoins.client.js -o client/coloredcoins.client.js",
-    "uglify": "uglifyjs client/coloredcoins.client.js -o client/coloredcoins.client.min.js",
+    "browserify": "browserify --ignore-missing -it=mkpath --standalone DigiAssets --entry src/digiassets.js --outfile client/digiassets.client.js",
+    "babel": "babel client/digiassets.client.js -o client/digiassets.client.js",
+    "uglify": "uglifyjs client/digiassets.client.js -o client/digiassets.client.min.js",
     "coverage": "istanbul cover _mocha -- -R spec",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "client_commit": "git commit --quiet ./client -m \"browserify and uglify\" || echo \"No changes to commit\"",
     "preversion": "npm run browserify && npm run babel && npm run uglify && npm run client_commit"
   },
   "keywords": [
-    "colored-coins",
+    "digiassets",
     "bitcoin",
+    "digibyte",
     "blockchain"
   ],
   "author": "oleiba",
@@ -23,8 +24,8 @@
   "dependencies": {
     "async": "^2.1.4",
     "blockexplorer-rpc": "^0.0.4",
-    "cc-transaction-builder": "^0.1.3",
-    "coloredcoins-rpc": "^0.1.0",
+    "digiasset-transaction-builder": "^0.2.0",
+    "digiassets-rpc": "^0.2.0",
     "debug": "^2.6.8",
     "hdwallet": "^0.7.1",
     "node-rest-client": "2.5.0",
@@ -41,6 +42,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Colored-Coins/colored-coins-sdk.git"
+    "url": "https://github.com/DigiByte-Core/digiassets-sdk.git"
   }
 }

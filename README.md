@@ -1,4 +1,4 @@
-# Colored-Coins SDK
+# DigiAssets SDK
 [![Build Status](https://travis-ci.org/Colored-Coins/colored-coins-sdk.svg?branch=master)](https://travis-ci.org/Colored-Coins/colored-coins-sdk)
 [![Coverage Status](https://coveralls.io/repos/github/Colored-Coins/colored-coins-sdk/badge.svg?branch=master)](https://coveralls.io/github/Colored-Coins/colored-coins-sdk?branch=master)
 [![npm version](https://badge.fury.io/js/coloredcoins-sdk.svg)](http://badge.fury.io/js/coloredcoins-sdk)
@@ -12,14 +12,14 @@ Coupled with state-of-the-art [BIP32](https://github.com/bitcoin/bips/blob/maste
 ## Installation
 
 ```sh
-$ npm i coloredcoins-sdk
+$ npm i digiassets-sdk
 ```
 ## Usage
 
 ```js
-var ColoredCoins = require('coloredcoins-sdk')
-var cc = new ColoredCoins()
-cc.init(function (err) {
+var DigiAssets = require('digiassets-sdk')
+var da = new DigiAssets()
+da.init(function (err) {
   // Colored-Coins SDK is now ready
 })
 ```
