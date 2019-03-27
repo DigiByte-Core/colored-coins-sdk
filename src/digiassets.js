@@ -12,10 +12,10 @@ var FullNode = require('../lib/full_node')
 var MetadataServer = require('../lib/metadata_server')
 
 var mainnetColoredCoinsHost = 'https://api.digiassets.net/v3'
-var testnetColoredCoinsHost = 'https://testnet.api.coloredcoins.org/v3'
+var testnetColoredCoinsHost = 'https://testnet.api.digiassets.net/v3'
 
 var mainnetBlockExplorerHost = 'https://explorerapi.digiassets.net'
-var testnetBlockExplorerHost = 'https://testnet.explorer.coloredcoins.org'
+var testnetBlockExplorerHost = 'https://testnet.explorerapi.digiassets.net'
 
 var metadataServerHost = 'https://metadata.digiassets.net'
 
