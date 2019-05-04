@@ -3,6 +3,8 @@
 Easy to use SDK for issuing and transferring digital assets using DigiAssets on top of DigiByte blockchain technology.
 Coupled with state-of-the-art [BIP32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) & [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) hierarchical deterministic wallet to hold your assets.
 
+You can find a more detailed guide of using the sdk here in the DigiAssets wiki: https://github.com/DigiByte-Core/DigiAssets-Protocol-Specifications/wiki/DigiAsset-Scheme
+
 ## Installation
 
 ```sh
